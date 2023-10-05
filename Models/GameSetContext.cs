@@ -13,9 +13,9 @@ namespace GameSetWebApi.Models
             _configuration = configuration;
         }
 
-        public DbSet<Person> Person { get; set; }
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<TeamPerson> Team_Person { get; set; }
+        public DbSet<Person> person { get; set; }
+        public DbSet<Team> team { get; set; }
+        public DbSet<TeamPerson> team_person { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
