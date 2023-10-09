@@ -3,6 +3,9 @@ using GameSetWebApi.Models;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
 var Configuration = builder.Configuration;
@@ -14,7 +17,12 @@ if (builder.Environment.IsDevelopment())
 }
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        // Add other Newtonsoft.Json settings here if needed.
+    });
 
 builder.Services.AddDbContext<GameSetContext>(opt =>
 {

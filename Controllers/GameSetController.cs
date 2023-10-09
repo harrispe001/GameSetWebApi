@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameSetWebApi.Models;
+using GameSetWebApi.Models.DTOs;
 
 namespace GameSetWebApi.Controllers
 {
@@ -36,13 +37,14 @@ namespace GameSetWebApi.Controllers
         [HttpGet("GetPerson/{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
-          if (_context.person == null)
-          {
-              return NotFound();
-          }
+            if (_context.person == null)
+            {
+                return NotFound();
+            }
+
             var person = await _context.person
                 .Include(p => p.TeamPerson)
-                .ThenInclude(tp => tp.Team) // Use ThenInclude to get navigation properties of the joined entity
+                .ThenInclude(tp => tp.Team)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (person == null)
@@ -52,6 +54,53 @@ namespace GameSetWebApi.Controllers
 
             return person;
         }
+
+        #region "DTO test"
+        // GET: api/GameSet/5
+        [HttpGet("GetPersonDTO/{id}")]
+        public async Task<ActionResult<PersonDTO>> GetPersonDTO(int id)
+        {
+            if (_context.person == null)
+            {
+                return NotFound();
+            }
+
+            var person = await _context.person
+                .Include(p => p.TeamPerson)
+                .ThenInclude(tp => tp.Team)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            var personDto = ConvertToDTO(person);
+
+            return personDto;
+        }
+
+
+        private PersonDTO ConvertToDTO(Person person)
+        {
+            var dto = new PersonDTO
+            {
+                Id = person.Id,
+                FirstName = person.FirstName,
+                LastName = person.LastName,
+                Birthday = person.Birthday,
+                Email = person.Email,
+                PhoneNumber = person.PhoneNumber,
+                Teams = person.TeamPerson.Select(tp => new TeamDTO
+                {
+                    TeamId = tp.Team.TeamId,
+                    TeamName = tp.Team.Name
+                }).ToList()
+            };
+
+            return dto;
+        }
+        #endregion
 
         // PUT: api/GameSet/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
