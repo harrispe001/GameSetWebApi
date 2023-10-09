@@ -46,7 +46,7 @@ namespace GameSetWebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
+                    b.ToTable("person");
                 });
 
             modelBuilder.Entity("GameSetWebApi.Models.Team", b =>
@@ -61,34 +61,34 @@ namespace GameSetWebApi.Migrations
 
                     b.HasKey("TeamId");
 
-                    b.ToTable("Teams");
+                    b.ToTable("team");
                 });
 
             modelBuilder.Entity("GameSetWebApi.Models.TeamPerson", b =>
                 {
-                    b.Property<int>("TeamId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
 
-                    b.HasKey("TeamId", "PersonId");
+                    b.Property<int>("TeamId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PersonId");
+                    b.HasKey("PersonId", "TeamId");
 
-                    b.ToTable("TeamPersons");
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("team_person");
                 });
 
             modelBuilder.Entity("GameSetWebApi.Models.TeamPerson", b =>
                 {
                     b.HasOne("GameSetWebApi.Models.Person", "Person")
-                        .WithMany("TeamPersons")
+                        .WithMany("TeamPerson")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GameSetWebApi.Models.Team", "Team")
-                        .WithMany("TeamPersons")
+                        .WithMany("TeamPerson")
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -100,12 +100,12 @@ namespace GameSetWebApi.Migrations
 
             modelBuilder.Entity("GameSetWebApi.Models.Person", b =>
                 {
-                    b.Navigation("TeamPersons");
+                    b.Navigation("TeamPerson");
                 });
 
             modelBuilder.Entity("GameSetWebApi.Models.Team", b =>
                 {
-                    b.Navigation("TeamPersons");
+                    b.Navigation("TeamPerson");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@
         public DateOnly Birthday { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public ICollection<TeamPerson> TeamPersons { get; set; } = new List<TeamPerson>();
+        public ICollection<TeamPerson> TeamPerson { get; set; } = new List<TeamPerson>();
 
     }
 }

@@ -20,7 +20,17 @@ namespace GameSetWebApi.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TeamPerson>()
-                .HasKey(tp => new { tp.TeamId, tp.PersonId });
+                .HasKey(tp => new { tp.PersonId, tp.TeamId });
+
+            modelBuilder.Entity<TeamPerson>()
+                .HasOne(tp => tp.Person)
+                .WithMany(p => p.TeamPerson)
+                .HasForeignKey(tp => tp.PersonId);
+
+            modelBuilder.Entity<TeamPerson>()
+                .HasOne(tp => tp.Team)
+                .WithMany(t => t.TeamPerson)
+                .HasForeignKey(tp => tp.TeamId);
         }
     }
 }

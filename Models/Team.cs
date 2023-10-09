@@ -4,6 +4,6 @@
     {
         public int TeamId { get; set; }
         public string Name { get; set; }
-        public ICollection<TeamPerson> TeamPersons { get; set; } = new List<TeamPerson>();
+        public ICollection<TeamPerson> TeamPerson { get; set; } = new List<TeamPerson>();
     }
 }
